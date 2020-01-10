@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="SAMPLE TEST SUITE" parallel="false">
+
+	<test name="LAUNCH SELENIUM SITE IN BROWSER">
+		<classes>			
+			<class name="testClasses.LaunchSeleniumHomePage" />
+		</classes>
+	</test>
+
+	<test name="LOGIN IN TO SELENIUM SITE">
+		<classes>
+			<class name="testClasses.Login_Application" />
+		</classes>
+	</test>
+
+	<test name="VERIFY THE INBOX">
+		<classes>
+			<class name="testClasses.VerifyInbox" />
+		</classes>
+	</test>
+
+<!-- 
+	<test name="SKIPPING THE <> LOGIN IN TO SELENIUM SITE">
+		<classes>
+			<class name="testClasses.SkipLogin_Application" />
+		</classes>
+	</test>
+
+ -->
+
+<!--
+ 	<test name="LOGIN">
+		<classes>
+			<class name="testClasses.inboxTest" />
+			<class name="testClasses.loginTest" />
+			<class name="testClasses.LaunchSeleniumHomePage" />
+
+		</classes>
+	</test>    
+-->
+
+</suite> 

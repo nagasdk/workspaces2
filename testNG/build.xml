@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<project name="Running Selenium>>testNG with Ant" default="clean" basedir=".">
+	
+	<property environment="env" />
+
+	<property name="ws.home" value="${basedir}"/>						<!-- ::Example:: D:/EclipseJuno/Workspace_PractiseSelenium/testNG-->
+	<property name="ws.jars" value="D:/Softwares/Jars/testng"/>
+	<property name="test.dest" value="${ws.home}/build"/>
+	<property name="test.src" value="${ws.home}/src"/>
+	<property name="ng.result" value="test-output"/>					<!--  modify as value="${ws.home}/test-output"    -->
+
+	
+	<!-- ================================= 
+    ;;;;  target: name ;;;;;;;;;;;              
+         
+    <target name="start-selenium-server" >
+    	<java jar="${ws.home}/lib/selenium-server.jar" />
+    </target>
+	================================= -->
+
+	
+	<!-- ================================= 
+          target: setClassPath              
+    ================================= -->
+	<target name="setClassPath" unless="test.classpath" depends="clean">
+		<path id="classpath_jars">
+			<!-- <pathelement path="${basedir}/" /> -->
+			<fileset dir="${ws.jars}" includes="*.jar" />
+		</path>
+		<pathconvert pathsep=":" 
+			property="test.classpath" 
+			refid="classpath_jars" />
+	</target>
+
+	
+	<!-- ================================= 
+          target: init              
+    ================================= -->
+	<target name="init" depends="setClassPath">
+			<tstamp>
+				<format property="start.time" pattern="MM/dd/yyyy hh:mm:ss" />
+			</tstamp>
+			<condition property="ANT" 
+					value="${env.ANT_HOME}/bin/ant.bat" 
+					else="${env.ANT_HOME/bin/ant}">
+						<os family="Windows" />
+			</condition>
+	
+			<taskdef name="testng" classpath="${test.classpath}" classname="org.testng.TestNGAntTask" />			
+			<echo message="test.classpath ......${test.classpath}"></echo>
+			
+			<!--<java classname="org.testng.TestNGANTask" classpath="" jar="${test.classpath}"></java> -->
+	</target>
+
+	
+	
+	<!-- ================================= 
+          target: all              
+    ================================= -->
+ 	<target name="all">
+	</target>
+
+
+	<!-- ================================= 
+          target: clean              
+     ================================= -->
+ 	<target name="clean" >
+		<delete dir="${test.dest}" />
+	</target>
+
+	<!-- ================================= 
+          target: compile              
+     ================================= -->
+	<target name="compile" depends="init,clean" description="COMPILE All the classes, Store them in 'build' Dir">
+
+		<delete  quiet="true">
+			<fileset dir="${test.dest}" includes="**/*" />
+		</delete>
+
+		<echo message="Making a Clean Directory for storing all the compiled classes ...... ${test.dest}" />
+		<mkdir dir="${test.dest}" />
+		<echo message="test.classpathclasspath ......${test.classpath}" />
+		<echo message="compiling ......" />
+
+		<javac 
+			debug="true" 
+			srcdir="${test.src}" 
+			destdir="${test.dest}" 
+	    	target="1.7"
+	    	classpath="${test.classpath}"
+			includeAntRuntime="false"
+		> 
+		<!--
+		includeAntRuntime="no"
+		-->
+		</javac>	
+	</target>
+
+	
+	<!-- ================================= 
+          target: build              
+    ================================= -->
+    <target name="build" depends="init" description="making a  Jar">        
+    </target>
+
+	<!-- ================================= 
+          target: run              
+    ================================= -->
+    <target name="run" depends="compile" description="running the compiles testscript classes">
+        <testng classpath="${test.classpath}:${test.dest}" suitename="Sample Run from ANT">
+        	<xmlfileset dir="${ws.home}" includes="testng.xml"/>
+        </testng>
+    </target>
+	
+	<!-- ================================= 
+          target: usage              
+    ================================= -->
+    <target name="usage" description="Purpose">
+        <echo>
+        	Ant would clean,compile,run the test classes
+        </echo>
+    </target>
+
+	
+	<path id="test.c">
+		<fileset dir="${ws.jars}" includes="*.jar" />
+	</path>
+
+  	<!-- ================================= 
+          target: makexsltreports              
+  	================================= -->
+    <target name="makexsltreports"  description="description">				<!-- <target name="makexsltreport" depends="run" description="description"> -->
+    	<delete dir="${ws.home}/XSLT_Reports/output"/>
+        <mkdir dir="${ws.home}/XSLT_Reports/output"/>
+    	
+    	<xslt in="${ng.result}/testng-results.xml" style="${ws.home}/testng-results.xsl" 
+    		  out="${ws.home}/XSLT_Reports/output/index.html" classpathref="test.c" 
+    		  processor="SaxonLiaison" >
+    		
+    		<param name="testNgXslt.outputDir" expression="${ws.home}/XSLT_Reports/output/"/>
+    		<param name="testNgXslt.showRuntimeTotals" expression="true"/>
+    		
+    	</xslt>   	
+    </target>
+
+
+	<!-- ================================= 
+          target: sendEmail              
+	================================= -->
+    <target name="sendEmail" depends="makexsltreports" description="Sending An Email ">
+    	<zip destfile="${project.dir}/XSLT_Reports/output.zip" basedir="${project.dir}/XSLT_Reports/output" />
+    	<mail   tolist="List of mail id separated with comma"
+    			from="username@gmail.com"
+    			subject="Email subject"
+    			mailhost="smtp.gmail.com"
+    			mailport="465"
+    			ssl="true"
+    			user="username@gmail.com"
+    			password="password">
+    			<attachments>
+    				<fileset dir="${project.dir}/XSLT_Reports/">
+    					<include name="**/*.zip"/>
+    				</fileset>
+    			</attachments>
+    	</mail>    	
+    </target>
+
+	
+
+
+	
+	
+	
+
+
+	</project>

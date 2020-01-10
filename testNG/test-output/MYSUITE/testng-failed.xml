@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [MYSUITE]">
+  <test name="LOGIN IN TO SELENIUM SITE(failed)">
+    <classes>
+      <class name="testClasses.VerifyInbox">
+        <methods>
+          <include name="afterClass"/>
+          <include name="beforeClass"/>
+        </methods>
+      </class> <!-- testClasses.VerifyInbox -->
+      <class name="testClasses.LaunchSeleniumHomePage">
+        <methods>
+          <include name="oneTimeSetUp"/>
+          <include name="oneTimeCloseUp"/>
+          <include name="beforeTest"/>
+          <include name="afterTest"/>
+        </methods>
+      </class> <!-- testClasses.LaunchSeleniumHomePage -->
+      <class name="testClasses.Login_Application">
+        <methods>
+          <include name="call_afterclass"/>
+          <include name="CheckLoggedUserLink_HomePage"/>
+          <include name="fetchExpectedValue_User"/>
+          <include name="confirmTheUserLoginStatus"/>
+          <include name="call_beforeclass"/>
+          <include name="compareLoggedUser"/>
+          <include name="getActualValue_User"/>
+        </methods>
+      </class> <!-- testClasses.Login_Application -->
+    </classes>
+  </test> <!-- LOGIN IN TO SELENIUM SITE(failed) -->
+</suite> <!-- Failed suite [MYSUITE] -->
